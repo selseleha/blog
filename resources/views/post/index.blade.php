@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-    <br>
+        <br>
         <a type="button" href="{{route('post.create')}}" class="btn btn-primary">Add New Post</a>
         <br>
         <table class="table table-striped">
@@ -25,7 +25,15 @@
                         @endif</td>
 
                     <td>@if ($post->userCanEdit(Auth::user()))
-                            <a href="{{ route("post.destroy",$post->id) }}">Delete</a>
+
+                            <form action="{{ route("post.destroy",$post->id) }}" method="post">
+                                <div class="modal-body">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="btn btn-danger"  onclick="return confirm('Are you sure you want to delete this item?');"> Delete </button>
+                                </div>
+                            </form>
                         @endif</td>
                 </tr>
             @endforeach

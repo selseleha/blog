@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CanBeAuthor;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostsRequest extends FormRequest
+class PostUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +23,9 @@ class PostsRequest extends FormRequest
      */
     public function rules()
     {
-
-            return [
-                'title' => 'required',
-                'content' => 'required',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-
-            ];
-
+        return [
+            'title' => 'required',
+            'content' => 'required',
+        ];
     }
 }

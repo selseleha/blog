@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostsRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\MediaLibrary;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -13,7 +15,7 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index()
     {
@@ -24,7 +26,7 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
@@ -42,7 +44,7 @@ class PostController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function store(PostsRequest $request)
     {
@@ -64,7 +66,7 @@ class PostController extends Controller
      *
      * @param \App\Models\Post $post
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show(Post $post){
 
@@ -78,11 +80,12 @@ class PostController extends Controller
      *
      * @param \App\Models\Post $post
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit(Post $post)
     {
-        //
+        $post= Post::findorfail($post->id);
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -93,9 +96,20 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        if ($request->image){
+            //store image in public
+
+            $image = $request->file('image');
+            $post->image = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/images');
+            $image->move($destinationPath, $post->image);
+
+        }
+
+        $affectedRows = $post->update(array('title' => $request->title,'content'=> $request->content,'image'=>$post->image));
+        return redirect(route('post.index'));
     }
 
     /**
@@ -103,11 +117,12 @@ class PostController extends Controller
      *
      * @param \App\Models\Post $post
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect(route('post.index'));
     }
 
     public function guestIndex(){

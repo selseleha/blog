@@ -17,12 +17,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::group(['domain' => 'admin.127.0.0.1'], function () {
-    Route::get('/', function () {
-        return "This will respond to requests for 'admin.localhost/'";
-    });
-});
 
+//change database connection
 DB::disconnect();
 Config::set('database.default','mysql');
 DB::reconnect();
