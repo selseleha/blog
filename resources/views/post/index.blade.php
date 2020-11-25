@@ -37,7 +37,11 @@
                         @endif</td>
                 </tr>
             @endforeach
+
             </tbody>
         </table>
+
         <div>
+    {{ $posts->links() }}
 @endsection
+

@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 //change database connection
-DB::disconnect();
-Config::set('database.default','mysql');
-DB::reconnect();
+
+
+
 
 Route::get('/users', 'App\Http\Controllers\testController@getTranslation');
 
@@ -29,8 +29,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-
 Route::get('post/guest',[PostController::class,'guestIndex']);
+
 Route::resource('post',PostController::class)
     ->middleware('auth');
 

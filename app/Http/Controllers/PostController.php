@@ -19,7 +19,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::simplePaginate(10);
         return view('post.index', compact('posts'));
     }
 
@@ -126,7 +126,7 @@ class PostController extends Controller
     }
 
     public function guestIndex(){
-        $posts = Post::all();
+        $posts = Post::simplePaginate(3);
         return view('post.guestIndex', compact('posts'));
     }
 }
