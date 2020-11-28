@@ -27,16 +27,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $array = explode('.', Request::server('HTTP_HOST'));
+        $array = explode('.', Request::server('SERVER_NAME'));
         $subdomain=array_shift($array);
 
+echo $subdomain;
         switch ($subdomain) {
-            case "sample1":
+            case "blog1":
                 DB::disconnect();
                 Config::set('database.default', 'mysql1');
                 DB::reconnect();
                 break;
-            case "sample2":
+            case "blog2":
                 DB::disconnect();
                 Config::set('database.default', 'mysql2');
                 DB::reconnect();
