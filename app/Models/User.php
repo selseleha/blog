@@ -60,29 +60,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    /**
-     * Check if the user can be an author
-     */
-    public function canBeAuthor(): bool
-    {
-        return $this->isAdmin() || $this->isEditor();
-    }
 
-    /**
-     * Check if the user has role admin
-     */
-    public function isAdmin(): bool
-    {
-        return $this->hasRole(Role::ROLE_ADMIN);
-    }
-
-    /**
-     * Check if the user has role editor
-     */
-    public function isEditor(): bool
-    {
-        return $this->hasRole(Role::ROLE_EDITOR);
-    }
 
     public function scopeAuthors(): int
     {
